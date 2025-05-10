@@ -1,0 +1,27 @@
+version: '3.9'
+
+networks:
+  kaj_net:
+    driver: bridge
+    name: kaj_net
+    attachable: true
+  reverseproxy_net:
+    external: true
+
+services:
+  kaj:
+    container_name: kaj
+    build:
+      context: ./semestral-work
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - kaj_net
+    restart: unless-stopped
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
