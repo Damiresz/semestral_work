@@ -23,10 +23,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* Meta tag for proper scaling on different devices */}
-        <meta name="next-size-adjust" content="100%" />
-      </head>
       {/* Apply Inter font and antialiasing to body */}
       <body className={`${inter.variable} antialiased`}>
         {children}
