@@ -14,7 +14,7 @@ export default function CubeAnimation() {
     glow: '#FF0000'
   });
 
-  // Функция для генерации случайного цвета
+  // Function to generate a random color
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -24,7 +24,7 @@ export default function CubeAnimation() {
     return color;
   };
 
-  // Функция для обновления цветов куба
+  // Function to update cube colors
   const updateColors = () => {
     const newColors = {
       top: getRandomColor(),
@@ -57,6 +57,14 @@ export default function CubeAnimation() {
         cube.removeEventListener('mousemove', handleMouseMove);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateColors();
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -92,14 +100,6 @@ export default function CubeAnimation() {
           }}
         />
       </div>
-      <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={updateColors}
-          className="absolute top-6 right-6 translate-x-1/2 -translate-y-1/2 px-6 py-3  bg-blue-800 text-white rounded-lg font-medium hover:bg-blue-900 transition-colors"
-        >
-          Change Colors
-        </motion.button>
     </motion.div>
   );
 } 
