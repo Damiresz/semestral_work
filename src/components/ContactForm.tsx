@@ -18,13 +18,13 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
   const validate = () => {
     const newErrors: typeof errors = {};
     if (!formData.name || formData.name.trim().length < 2) {
-      newErrors.name = 'Имя должно содержать минимум 2 символа';
+      newErrors.name = 'Name must be at least 2 characters';
     }
     if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Введите корректный email';
+      newErrors.email = 'Enter a valid email';
     }
     if (!formData.message || formData.message.trim().length < 5) {
-      newErrors.message = 'Сообщение должно содержать минимум 5 символов';
+      newErrors.message = 'Message must be at least 5 characters';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -45,16 +45,16 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
       onSubmit={onSubmit}
       className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg md:col-span-2"
     >
-      <h2 className="text-2xl font-semibold mb-4">Контактная Форма</h2>
+      <h2 className="text-2xl font-semibold mb-4">Contact Form</h2>
       <div className="space-y-4">
         <div>
-          <label className="block mb-2">Имя</label>
+          <label className="block mb-2">Name</label>
           <input
             ref={nameRef}
             type="text"
             required
             minLength={2}
-            placeholder="Введите ваше имя"
+            placeholder="Enter your name"
             autoFocus
             className={`w-full p-2 border rounded dark:bg-gray-700 ${errors.name ? 'border-red-500' : ''}`}
             value={formData.name}
@@ -67,7 +67,7 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
           <input
             type="email"
             required
-            placeholder="Введите ваш email"
+            placeholder="Enter your email"
             className={`w-full p-2 border rounded dark:bg-gray-700 ${errors.email ? 'border-red-500' : ''}`}
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -75,11 +75,11 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
           {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
         </div>
         <div>
-          <label className="block mb-2">Сообщение</label>
+          <label className="block mb-2">Message</label>
           <textarea
             required
             minLength={5}
-            placeholder="Введите сообщение"
+            placeholder="Enter your message"
             className={`w-full p-2 border rounded dark:bg-gray-700 ${errors.message ? 'border-red-500' : ''}`}
             rows={4}
             value={formData.message}
@@ -91,7 +91,7 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
         >
-          Отправить
+          Send
         </button>
       </div>
     </motion.form>

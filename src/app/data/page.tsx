@@ -5,9 +5,16 @@ import Navigation from '@/components/Navigation';
 import DataTable from '@/components/DataTable';
 import AdvancedSelectorsSection from '@/components/AdvancedSelectorsSection';
 import OOPDemoSection from '@/components/OOPDemoSection';
+import ContactForm from '@/components/ContactForm';
 
 export default function DataPage() {
   const [isOnline, setIsOnline] = useState(true);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert('Message sent!');
+    setFormData({ name: '', email: '', message: '' });
+  };
 
   return (
     <main className="min-h-screen p-8">
@@ -30,6 +37,9 @@ export default function DataPage() {
         <DataTable />
         <AdvancedSelectorsSection />
         <OOPDemoSection />
+        <div className="mt-12">
+          <ContactForm formData={formData} setFormData={setFormData} handleSubmit={handleSubmit} />
+        </div>
       </section>
     </main>
   );
