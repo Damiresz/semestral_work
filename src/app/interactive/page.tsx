@@ -6,6 +6,7 @@ import Navigation from '@/components/Navigation';
 import InteractiveCanvas from '@/components/InteractiveCanvas';
 import SvgAnimation from '@/components/SvgAnimation';
 import AudioPlayer from '@/components/AudioPlayer';
+import CubeAnimation from '@/components/CubeAnimation';
 
 /**
  * InteractivePage component that serves as the interactive components showcase
@@ -19,13 +20,17 @@ export default function InteractivePage() {
     <main className="min-h-screen p-8">
       {/* Navigation component */}
       <Navigation />
-
       {/* Main content section with interactive components */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Interactive canvas component */}
         <InteractiveCanvas />
         {/* SVG animation component */}
         <SvgAnimation />
+        {/* 3D Cube Animation section */}
+        <div className="md:col-span-2">
+          <CubeAnimation />
+          
+        </div>
         {/* Audio player component (full width) */}
         <div className="md:col-span-2">
           <AudioPlayer />

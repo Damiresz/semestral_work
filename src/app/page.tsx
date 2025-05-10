@@ -7,6 +7,7 @@ import Navigation from '@/components/Navigation';
 import Geolocation from '@/components/Geolocation';
 import WeatherSection from '@/components/WeatherSection';
 import FileUploader from '@/components/FileUploader';
+import CubeAnimation from '@/components/CubeAnimation';
 
 /**
  * Interface defining the structure of weather data
