@@ -1,8 +1,13 @@
 'use client';
 
+// Import necessary dependencies
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
+/**
+ * Interface defining the structure of a particle
+ * Includes position, size, velocity, and color properties
+ */
 interface Particle {
   x: number;
   y: number;
@@ -12,18 +17,24 @@ interface Particle {
   color: string;
 }
 
+/**
+ * InteractiveCanvas component that creates an interactive particle animation
+ * Includes mouse interaction and particle physics
+ */
 export default function InteractiveCanvas() {
+  // References for canvas and particles
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
+  // State for drawing and mouse position
   const [isDrawing, setIsDrawing] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // Initialization of canvas and particles
+  // Effect for canvas initialization and particle creation
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Set canvas size
+    // Function to resize canvas to fit container
     const resizeCanvas = () => {
       const container = canvas.parentElement;
       if (!container) return;
@@ -33,7 +44,7 @@ export default function InteractiveCanvas() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Initialize particles
+    // Create initial particles
     const newParticles: Particle[] = [];
     for (let i = 0; i < 50; i++) {
       newParticles.push({
@@ -47,12 +58,13 @@ export default function InteractiveCanvas() {
     }
     particlesRef.current = newParticles;
 
+    // Cleanup resize listener
     return () => {
       window.removeEventListener('resize', resizeCanvas);
     };
   }, []);
 
-  // Particle animation
+  // Effect for particle animation and rendering
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -61,19 +73,21 @@ export default function InteractiveCanvas() {
 
     let animationId: number;
     const animate = () => {
+      // Clear canvas
       ctx.fillStyle = '#f9fafb';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // Update and draw each particle
       particlesRef.current.forEach(particle => {
-        // Update position
+        // Update position based on velocity
         particle.x += particle.speedX;
         particle.y += particle.speedY;
 
-        // Bounce off walls
+        // Handle wall collisions
         if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
         if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
 
-        // Attract to cursor
+        // Apply mouse attraction when drawing
         if (isDrawing) {
           const dx = mousePosition.x - particle.x;
           const dy = mousePosition.y - particle.y;
@@ -91,12 +105,17 @@ export default function InteractiveCanvas() {
         ctx.fill();
       });
 
+      // Request next animation frame
       animationId = requestAnimationFrame(animate);
     };
     animate();
     return () => cancelAnimationFrame(animationId);
   }, [isDrawing, mousePosition]);
 
+  /**
+   * Handle mouse movement on canvas
+   * Updates mouse position with proper scaling
+   */
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -117,6 +136,7 @@ export default function InteractiveCanvas() {
     >
       <h2 className="text-2xl font-semibold mb-4">Interactive Canvas</h2>
       <div className="relative">
+        {/* Interactive canvas element */}
         <canvas
           ref={canvasRef}
           className="w-full h-[400px] border rounded-lg"
@@ -125,6 +145,7 @@ export default function InteractiveCanvas() {
           onMouseUp={() => setIsDrawing(false)}
           onMouseLeave={() => setIsDrawing(false)}
         />
+        {/* Interaction instructions */}
         <div className="absolute bottom-4 left-4 text-sm text-gray-500">
           Click and hold to interact with particles
         </div>

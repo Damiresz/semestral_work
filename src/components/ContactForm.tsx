@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
 
+/**
+ * Interface defining the props for the ContactForm component
+ * Includes form data, setter function, and submit handler
+ */
 interface ContactFormProps {
   formData: {
     name: string;
@@ -11,18 +15,31 @@ interface ContactFormProps {
   handleSubmit: (e: React.FormEvent) => void;
 }
 
+/**
+ * ContactForm component that handles user contact information
+ * Includes form validation and error handling
+ */
 export default function ContactForm({ formData, setFormData, handleSubmit }: ContactFormProps) {
+  // State for storing validation errors
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  // Reference for the name input field
   const nameRef = useRef<HTMLInputElement>(null);
 
+  /**
+   * Validates form data and sets error messages
+   * @returns {boolean} True if form is valid, false otherwise
+   */
   const validate = () => {
     const newErrors: typeof errors = {};
+    // Validate name
     if (!formData.name || formData.name.trim().length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
+    // Validate email format
     if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email)) {
       newErrors.email = 'Enter a valid email';
     }
+    // Validate message length
     if (!formData.message || formData.message.trim().length < 5) {
       newErrors.message = 'Message must be at least 5 characters';
     }
@@ -30,6 +47,10 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
     return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Handles form submission
+   * Validates form data before submitting
+   */
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
@@ -47,6 +68,7 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
     >
       <h2 className="text-2xl font-semibold mb-4">Contact Form</h2>
       <div className="space-y-4">
+        {/* Name input field */}
         <div>
           <label className="block mb-2">Name</label>
           <input
@@ -62,6 +84,7 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
           />
           {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
         </div>
+        {/* Email input field */}
         <div>
           <label className="block mb-2">Email</label>
           <input
@@ -74,6 +97,7 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
           />
           {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
         </div>
+        {/* Message textarea */}
         <div>
           <label className="block mb-2">Message</label>
           <textarea
@@ -87,6 +111,7 @@ export default function ContactForm({ formData, setFormData, handleSubmit }: Con
           />
           {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
         </div>
+        {/* Submit button */}
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"

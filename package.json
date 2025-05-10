@@ -10,10 +10,11 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
-    "framer-motion": "^11.0.3",
+    "framer-motion": "^11.18.2",
     "next": "14.1.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-dropzone": "^14.3.8"
   },
   "devDependencies": {
     "@types/node": "^20",

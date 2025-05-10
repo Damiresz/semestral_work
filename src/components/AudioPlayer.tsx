@@ -1,9 +1,16 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+/**
+ * AudioPlayer component that provides a full-featured audio player
+ * Includes visualization, playback controls, and audio processing
+ */
 export default function AudioPlayer() {
+  // References for audio and canvas elements
   const audioRef = useRef<HTMLAudioElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  // State for player controls
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -11,12 +18,14 @@ export default function AudioPlayer() {
   const [isMuted, setIsMuted] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isLoop, setIsLoop] = useState(false);
+  
+  // References for Web Audio API
   const audioCtxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
   const [analyserReady, setAnalyserReady] = useState(false);
 
-  // Эквалайзер: отрисовка
+  // Effect for audio visualization
   useEffect(() => {
     if (!analyserReady) return;
     const canvas = canvasRef.current;
@@ -24,10 +33,14 @@ export default function AudioPlayer() {
     if (!canvas || !analyserNode) return;
     const ctx2d = canvas.getContext('2d');
     if (!ctx2d) return;
+    
+    // Configure analyzer
     analyserNode.fftSize = 64;
     const bufferLength = analyserNode.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     let animationId: number;
+    
+    // Draw visualization
     function draw() {
       if (!canvas || !ctx2d || !analyserNode) return;
       analyserNode.getByteFrequencyData(dataArray);
@@ -46,6 +59,7 @@ export default function AudioPlayer() {
     };
   }, [analyserReady]);
 
+  // Effect for updating audio properties
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
@@ -55,10 +69,11 @@ export default function AudioPlayer() {
     }
   }, [volume, isMuted, playbackRate, isLoop]);
 
+  // Handle play/pause functionality
   const handlePlayPause = async () => {
     if (!audioRef.current) return;
     if (!isPlaying) {
-      // Инициализация AudioContext и анализатора только при первом запуске
+      // Initialize AudioContext and analyzer on first play
       if (!audioCtxRef.current) {
         const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
         const analyserNode = ctx.createAnalyser();
@@ -70,7 +85,7 @@ export default function AudioPlayer() {
         sourceRef.current = src;
         setAnalyserReady(true);
       }
-      // Если контекст в состоянии suspended, резюмируем
+      // Resume context if suspended
       if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
         await audioCtxRef.current.resume();
       }
@@ -82,11 +97,13 @@ export default function AudioPlayer() {
     }
   };
 
+  // Handle time update
   const handleTimeUpdate = () => {
     if (!audioRef.current) return;
     setProgress(audioRef.current.currentTime);
   };
 
+  // Handle metadata loading
   const handleLoadedMetadata = () => {
     if (!audioRef.current) return;
     const dur = audioRef.current.duration;
@@ -94,7 +111,7 @@ export default function AudioPlayer() {
     console.log('onLoadedMetadata duration:', dur);
   };
 
-  // Дополнительная попытка обновить duration, если оно 0
+  // Effect for updating duration if initially 0
   useEffect(() => {
     if (duration === 0 && audioRef.current) {
       const interval = setInterval(() => {
@@ -109,6 +126,7 @@ export default function AudioPlayer() {
     }
   }, [duration]);
 
+  // Handle progress bar click
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!audioRef.current || !duration) return;
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
@@ -116,6 +134,7 @@ export default function AudioPlayer() {
     audioRef.current.currentTime = percent * duration;
   };
 
+  // Handle time skip
   const handleSkip = (seconds: number) => {
     if (!audioRef.current || !duration) return;
     let newTime = audioRef.current.currentTime + seconds;
@@ -131,6 +150,7 @@ export default function AudioPlayer() {
       className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center"
     >
       <h2 className="text-2xl font-semibold mb-4">Audio Player</h2>
+      {/* Audio element */}
       <audio
         ref={audioRef}
         src={'/Bella Ciao.mp3'}
@@ -139,6 +159,7 @@ export default function AudioPlayer() {
         onEnded={() => setIsPlaying(false)}
         preload="auto"
       />
+      {/* Play/Pause button */}
       <div className="flex items-center gap-4 mb-4">
         <button
           onClick={handlePlayPause}
@@ -147,7 +168,9 @@ export default function AudioPlayer() {
           {isPlaying ? 'Pause' : 'Play'}
         </button>
       </div>
+      {/* Visualization canvas */}
       <canvas ref={canvasRef} width={260} height={40} className="w-full mb-2 rounded bg-gray-100 dark:bg-gray-900" />
+      {/* Progress bar and skip controls */}
       <div className="flex items-center w-full gap-2 mb-2">
         <button onClick={() => handleSkip(-10)} className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">-10s</button>
         <div
@@ -161,11 +184,14 @@ export default function AudioPlayer() {
         </div>
         <button onClick={() => handleSkip(10)} className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600">+10s</button>
       </div>
+      {/* Time display */}
       <div className="w-full flex justify-between text-xs text-gray-500 mb-2">
         <span>{formatTime(progress)}</span>
         <span>{formatTime(duration)}</span>
       </div>
+      {/* Additional controls */}
       <div className="flex items-center gap-4 w-full mb-2">
+        {/* Loop control */}
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -174,12 +200,14 @@ export default function AudioPlayer() {
           />
           Repeat
         </label>
+        {/* Mute control */}
         <button
           onClick={() => setIsMuted(m => !m)}
           className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
         >
           {isMuted ? 'Unmute' : 'Mute'}
         </button>
+        {/* Volume control */}
         <label className="flex items-center gap-2">
           Volume
           <input
@@ -196,6 +224,7 @@ export default function AudioPlayer() {
             className="w-24"
           />
         </label>
+        {/* Playback speed control */}
         <label className="flex items-center gap-2">
           Speed
           <select
@@ -216,6 +245,11 @@ export default function AudioPlayer() {
   );
 }
 
+/**
+ * Format time in seconds to MM:SS format
+ * @param sec - Time in seconds
+ * @returns Formatted time string
+ */
 function formatTime(sec: number) {
   if (!sec || isNaN(sec)) return '0:00';
   const m = Math.floor(sec / 60);

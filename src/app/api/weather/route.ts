@@ -1,5 +1,13 @@
 import { NextResponse } from 'next/server';
 
+/**
+ * Mock data array for weather information
+ * Contains sample weather data for major European cities including:
+ * - Temperature, humidity, and feels-like temperature
+ * - Wind speed and direction
+ * - Weather description and icon code
+ * - City name and country code
+ */
 const mockCities = [
   {
     name: 'Prague',
@@ -53,9 +61,21 @@ const mockCities = [
   },
 ];
 
+/**
+ * GET handler for /api/weather endpoint
+ * Simulates weather API by:
+ * 1. Adding a small delay to mimic real API call
+ * 2. Generating slightly randomized weather data based on mock data
+ * 3. Calculating sunrise/sunset times based on current timestamp
+ * 
+ * @returns {Promise<NextResponse>} JSON response with weather data for all cities
+ * @throws {Error} Returns 500 status code if data fetching fails
+ */
 export async function GET() {
   try {
+    // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
+    
     const now = Date.now();
     const weatherArray = mockCities.map(city => ({
       main: {

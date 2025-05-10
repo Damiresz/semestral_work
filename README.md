@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Semestrální práce
 
-## Getting Started
+## Cíl projektu
+Moderní webová aplikace vyvinutá pomocí Next.js frameworku, která demonstruje použití moderních webových technologií a best practices.
 
-First, run the development server:
+## Postup implementace
+1. Inicializace Next.js projektu
+2. Nastavení základní struktury aplikace
+3. Implementace layoutu a globálních stylů
+4. Využití moderních webových technologií:
+   - Next.js pro server-side rendering
+   - TypeScript pro typovou bezpečnost
+   - Tailwind CSS pro styling
+   - Google Fonts (Inter) pro typografii
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Popis funkčnosti
+Aplikace je postavena na moderním stacku technologií:
+- **Next.js**: Framework pro React aplikace s podporou server-side renderingu
+- **TypeScript**: Zajišťuje typovou bezpečnost kódu
+- **Inter font**: Moderní sans-serif font od Google Fonts
+- **Tailwind CSS**: Utility-first CSS framework pro rychlý vývoj UI
+
+### Hlavní komponenty
+- `layout.tsx`: Hlavní layout aplikace obsahující:
+  - Meta tagy pro SEO optimalizaci
+  - Nastavení fontu
+  - Základní strukturu HTML dokumentu
+
+## Komentáře ve zdrojovém kódu
+```typescript
+// Import potřebných závislostí
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+
+// Konfigurace Inter fontu
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+// Metadata pro SEO
+export const metadata: Metadata = {
+  title: "Semestral Work",
+  description: "Modern web application",
+};
+
+// Hlavní layout komponenta
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <head>
+        {/* Meta tag pro správné škálování na různých zařízeních */}
+        <meta name="next-size-adjust" content="100%" />
+      </head>
+      <body className={`${inter.variable} antialiased`}>
+        {children}
+      </body>
+    </html>
+  );
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalace a spuštění
+1. Nainstalujte závislosti:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. Spusťte vývojový server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Otevřete [http://localhost:3000](http://localhost:3000) ve vašem prohlížeči
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Technologie
+- Next.js
+- TypeScript
+- Tailwind CSS
+- Google Fonts (Inter)
