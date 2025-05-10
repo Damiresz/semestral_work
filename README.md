@@ -26,44 +26,6 @@ Aplikace je postavena na moderním stacku technologií:
   - Nastavení fontu
   - Základní strukturu HTML dokumentu
 
-## Komentáře ve zdrojovém kódu
-```typescript
-// Import potřebných závislostí
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-// Konfigurace Inter fontu
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-// Metadata pro SEO
-export const metadata: Metadata = {
-  title: "Semestral Work",
-  description: "Modern web application",
-};
-
-// Hlavní layout komponenta
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <head>
-        {/* Meta tag pro správné škálování na různých zařízeních */}
-        <meta name="next-size-adjust" content="100%" />
-      </head>
-      <body className={`${inter.variable} antialiased`}>
-        {children}
-      </body>
-    </html>
-  );
-}
-```
 
 ## Instalace a spuštění
 1. Nainstalujte závislosti:
